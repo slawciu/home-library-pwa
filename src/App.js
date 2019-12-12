@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import Home from './Home';
 import AddNewBook from './AddNewBook';
 import booksData from './data/books';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+
 import { makeStyles } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
