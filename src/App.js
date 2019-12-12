@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Book from './Book';
+import booksData from './data/books';
 import './App.css';
 
 function App() {
+  const [books, setBooks] = useState(booksData)
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Biblioteka Morisków
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
+      <div>
+        Książki
+        {books.map(item => (
+          <Book key={item.id} book={item} />
+        ))}
+      </div>
     </div>
   );
 }
