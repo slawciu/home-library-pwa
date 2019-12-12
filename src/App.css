@@ -27,7 +27,7 @@
 .addNewBookForm {
   display: flex;
   flex-direction: column;
-  padding: 3vh 5vw;
+  padding: 18vh 5vw;
   justify-content: space-around;
   height: 43vh;
 }

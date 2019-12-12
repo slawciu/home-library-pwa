@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import Book from './Book';
-import booksData from './data/books';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,8 +17,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Home() {
-  const [books, setBooks] = useState(booksData)
+function Home(props) {
+  const [books, setBooks] = useState(props.booksData)
   return (
       <div>
         <div className="actionButton">
@@ -36,4 +36,8 @@ function Home() {
   );
 }
 
-export default Home;
+export default connect(
+  state => ({
+    booksData: state.books
+  }), dispatch => ({})
+)(Home);

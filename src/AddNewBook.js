@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Fab from '@material-ui/core/Fab';
@@ -9,6 +10,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 // import Scanner from './Scanner';
 // import ReactQuagga, {useQuagga} from './ReactQuagga';
 import './App.css';
+import {addBook} from './actions/books';
 
 function AddNewBook(props) {
   // const [scannerIsActive, setScannerIsActive] = useState(false)
@@ -52,7 +54,7 @@ function AddNewBook(props) {
         </FormControl>
       </form>
       <div className="actionButton">
-      <Fab onClick={() => { console.log('submit!', state); props.history.push('/')}} >
+      <Fab onClick={() => { props.addBook(state); props.history.push('/')}} >
         <SaveIcon color="primary"/>
       </Fab>
       </div>
@@ -69,4 +71,6 @@ function AddNewBook(props) {
   )
 }
 
-export default AddNewBook;
+export default connect(state => ({}), dispatch => ({
+  addBook: book => dispatch(addBook(book))
+}))(AddNewBook);
