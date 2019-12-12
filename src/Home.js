@@ -22,9 +22,9 @@ function Home() {
   return (
       <div>
         <div className="actionButton">
-            <Fab href="/add">
+          <Fab href="/add">
             <AddIcon color="primary"/>
-            </Fab>
+          </Fab>
         </div>
         <div>
             Książki

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Home from './Home';
 import AddNewBook from './AddNewBook';
-import booksData from './data/books';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -10,6 +9,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import Header from './Header';
 import './App.css';
 
 const useStyles = makeStyles(theme => ({
@@ -26,22 +26,17 @@ const useStyles = makeStyles(theme => ({
 function App() {
   return (
     <Router>
-    <div className="App">
-
-      <header className="App-header">
-        <p>
-          Biblioteka Morisków
-        </p>
-      </header>
-      <Switch>
-          <Route path="/add">
-            <AddNewBook />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+      <div className="App">
+      <Header />
+        <div className="content">
+          <Switch>
+            <Route path="/add" component={AddNewBook} />
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
         </div>
+      </div>
     </Router>
       
   );

@@ -13,11 +13,23 @@
   }
 }
 
+.content {
+  padding-top: 6vh;
+}
+
 .actionButton {
   position: fixed;
   z-index: 1;
   bottom: 30px;
   right: 40px;
+}
+
+.addNewBookForm {
+  display: flex;
+  flex-direction: column;
+  padding: 3vh 5vw;
+  justify-content: space-around;
+  height: 43vh;
 }
 
 .App-header {
