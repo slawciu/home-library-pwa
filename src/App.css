@@ -13,6 +13,13 @@
   }
 }
 
+.actionButton {
+  position: fixed;
+  z-index: 1;
+  bottom: 30px;
+  right: 40px;
+}
+
 .App-header {
   background-color: #282c34;
   display: flex;

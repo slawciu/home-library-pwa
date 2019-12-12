@@ -1,25 +1,50 @@
 import React, { useState } from 'react';
-import Book from './Book';
+import Home from './Home';
+import AddNewBook from './AddNewBook';
 import booksData from './data/books';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import './App.css';
 
-function App() {
-  const [books, setBooks] = useState(booksData)
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+}));
 
+function App() {
   return (
+    <Router>
     <div className="App">
+
       <header className="App-header">
         <p>
           Biblioteka Morisków
         </p>
       </header>
-      <div>
-        Książki
-        {books.map(item => (
-          <Book key={item.id} book={item} />
-        ))}
-      </div>
-    </div>
+      <Switch>
+          <Route path="/add">
+            <AddNewBook />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+        </div>
+    </Router>
+      
   );
 }
 
