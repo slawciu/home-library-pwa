@@ -1,58 +1,56 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Fab from '@material-ui/core/Fab';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-// import Scanner from './Scanner';
 import ReactQuagga, {useQuagga} from './ReactQuagga';
-import './App.css';
 import { withFirestore } from 'react-redux-firebase'
+import './App.css';
 
 function AddNewBook(props) {
   const [scannerIsActive, setScannerIsActive] = useState(false)
   const [results, setResults] = useState([])
   const scannerSupported = useQuagga()
-  const [state, setState] = useState({
-    title: '',
-    author: '',
-    location: 'Imielin'
-  })
   const [isbn, setIsbn] = useState('')
-
-  const {title, author, location} = state;
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [location, setlocation] = useState('Gliwice')
 
   const addNewBook = book => {
     props.firestore.add('books', book)
   }
 
-  const handleChange = name => event => {
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-  };
+  const searchBookDetails = async isbn => {
+    const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=AIzaSyDbWJY0AUKjfJKBAv7ORWzRL3imE2TU1kk`;
+    const response = await fetch(uri)
+    const bookInfo = await response.json();
+    if (bookInfo.items.length > 0) {
+      let title = bookInfo.items[0].volumeInfo.title;
+      let author = bookInfo.items[0].volumeInfo.authors[0];
 
-  console.log(results.map(r => r.codeResult.code))
+      setTitle(title);
+      setAuthor(author);
+    }
+  }
 
   return (
     <div>
       {results.length === 0 ? <div className="scannerArea">
         <ReactQuagga
-          onDetected={(data) => {setResults(results => ([...results, data])); setIsbn(data.codeResult.code)}}
+          onDetected={(data) => {setResults(results => ([...results, data])); searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code)}}
         />
       </div> :
       <form className="addNewBookForm" noValidate autoComplete="off">
-        <TextField variant="standard" label="Tytuł" value={title} onChange={handleChange('title')} />
-        <TextField variant="standard" label="Autor" value={author} onChange={handleChange('author')} />
-        <TextField variant="standard" label="ISBN" value={isbn} onChange={handleChange('isbn')} />
+        <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
+        <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
+        <TextField variant="standard" label="ISBN" value={isbn} onChange={event => setIsbn(event.target.value)} />
         <FormControl>
           <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
           <NativeSelect
             value={location}
-            onChange={handleChange('location')}
+            onChange={event => setlocation(event.target.value)}
             inputProps={{
               name: 'age',
               id: 'age-native-simple',
@@ -64,7 +62,7 @@ function AddNewBook(props) {
         </FormControl>
       </form>}
       <div className="actionButton">
-      <Fab onClick={() => { addNewBook(state); props.history.push('/')}} >
+      <Fab onClick={() => { addNewBook({author, title, location, isbn}); props.history.push('/')}} >
         <SaveIcon color="primary"/>
       </Fab>
       </div>
