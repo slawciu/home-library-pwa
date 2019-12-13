@@ -7,22 +7,22 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 // import Scanner from './Scanner';
-// import ReactQuagga, {useQuagga} from './ReactQuagga';
+import ReactQuagga, {useQuagga} from './ReactQuagga';
 import './App.css';
 import { withFirestore } from 'react-redux-firebase'
 
 function AddNewBook(props) {
-  // const [scannerIsActive, setScannerIsActive] = useState(false)
-  // const [results, setResults] = useState([])
-  // const scannerSupported = useQuagga()
+  const [scannerIsActive, setScannerIsActive] = useState(false)
+  const [results, setResults] = useState([])
+  const scannerSupported = useQuagga()
   const [state, setState] = useState({
     title: '',
     author: '',
-    isbn: '',
     location: 'Imielin'
   })
+  const [isbn, setIsbn] = useState('')
 
-  const {title, author, isbn, location} = state;
+  const {title, author, location} = state;
 
   const addNewBook = book => {
     props.firestore.add('books', book)
@@ -35,8 +35,15 @@ function AddNewBook(props) {
     });
   };
 
+  console.log(results.map(r => r.codeResult.code))
+
   return (
     <div>
+      {results.length === 0 ? <div className="scannerArea">
+        <ReactQuagga
+          onDetected={(data) => {setResults(results => ([...results, data])); setIsbn(data.codeResult.code)}}
+        />
+      </div> :
       <form className="addNewBookForm" noValidate autoComplete="off">
         <TextField variant="standard" label="Tytuł" value={title} onChange={handleChange('title')} />
         <TextField variant="standard" label="Autor" value={author} onChange={handleChange('author')} />
@@ -55,7 +62,7 @@ function AddNewBook(props) {
             <option value={'Imielin'}>Imielin</option>
           </NativeSelect>
         </FormControl>
-      </form>
+      </form>}
       <div className="actionButton">
       <Fab onClick={() => { addNewBook(state); props.history.push('/')}} >
         <SaveIcon color="primary"/>

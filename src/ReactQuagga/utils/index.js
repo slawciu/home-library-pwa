@@ -39,8 +39,8 @@ export const DEFAULT_CONFIG = {
     name : "Live",
     type : "LiveStream",
     constraints: {
-    width: 640,
-    height: 480,
+    width: 1920,
+    height: 1080,
     facingMode: "environment",
   },
   area: { // defines rectangle of the detection/localization area

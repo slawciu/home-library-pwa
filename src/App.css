@@ -24,6 +24,10 @@
   right: 40px;
 }
 
+.scannerArea {
+  width: 100vw;
+}
+
 .addNewBookForm {
   display: flex;
   flex-direction: column;
