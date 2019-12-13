@@ -24,7 +24,6 @@ function Home(props) {
     { collection: 'books' }
   ])
   const books = useSelector(state => state.firestore.ordered.books)
-  console.log(books)
   return (
       <div>
         <div className="actionButton">
@@ -44,7 +43,6 @@ function Home(props) {
 
 export default connect(
   state => {
-    console.log(state.firestore)
     return {firestore: state.firestore}
   }, dispatch => ({})
 )(Home);

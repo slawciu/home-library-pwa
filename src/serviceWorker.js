@@ -20,8 +20,14 @@ const isLocalhost = Boolean(
     )
 );
 
+const staticCacheName = 'site-static';
+const assets = [
+  '/',
+  'index.html'
+]
+
 export function register(config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -30,6 +36,17 @@ export function register(config) {
       // serve assets; see https://github.com/facebook/create-react-app/issues/2374
       return;
     }
+
+    window.addEventListener('install', evt => {
+      caches.open(staticCacheName).then(cache => {
+        cache.addAll(assets)
+      })
+      console.log('cached!')
+    })
+
+    window.addEventListener('fetch', evt => {
+      console.log('fetch', evt)
+    })
 
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;

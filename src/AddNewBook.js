@@ -15,7 +15,7 @@ function AddNewBook(props) {
   const [isbn, setIsbn] = useState('')
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
-  const [location, setlocation] = useState('Gliwice')
+  const [location, setLocation] = useState('Gliwice')
 
   const addNewBook = book => {
     props.firestore.add('books', book)
@@ -50,7 +50,7 @@ function AddNewBook(props) {
             <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
             <NativeSelect
               value={location}
-              onChange={event => setlocation(event.target.value)}
+              onChange={event => setLocation(event.target.value)}
               inputProps={{
                 name: 'age',
                 id: 'age-native-simple',
