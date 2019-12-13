@@ -4,13 +4,12 @@ import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Fab from '@material-ui/core/Fab';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 // import Scanner from './Scanner';
 // import ReactQuagga, {useQuagga} from './ReactQuagga';
 import './App.css';
-import {addBook} from './actions/books';
+import { withFirestore } from 'react-redux-firebase'
 
 function AddNewBook(props) {
   // const [scannerIsActive, setScannerIsActive] = useState(false)
@@ -24,6 +23,10 @@ function AddNewBook(props) {
   })
 
   const {title, author, isbn, location} = state;
+
+  const addNewBook = book => {
+    props.firestore.add('books', book)
+  }
 
   const handleChange = name => event => {
     setState({
@@ -54,7 +57,7 @@ function AddNewBook(props) {
         </FormControl>
       </form>
       <div className="actionButton">
-      <Fab onClick={() => { props.addBook(state); props.history.push('/')}} >
+      <Fab onClick={() => { addNewBook(state); props.history.push('/')}} >
         <SaveIcon color="primary"/>
       </Fab>
       </div>
@@ -71,6 +74,4 @@ function AddNewBook(props) {
   )
 }
 
-export default connect(state => ({}), dispatch => ({
-  addBook: book => dispatch(addBook(book))
-}))(AddNewBook);
+export default withFirestore(AddNewBook);

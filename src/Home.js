@@ -5,6 +5,8 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
+import { useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +20,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Home(props) {
-  const [books, setBooks] = useState(props.booksData)
+  useFirestoreConnect([
+    { collection: 'books' }
+  ])
+  const books = useSelector(state => state.firestore.ordered.books)
+  console.log(books)
   return (
       <div>
         <div className="actionButton">
@@ -28,7 +34,7 @@ function Home(props) {
         </div>
         <div>
             Książki
-            {books.map(item => (
+            {books && books.map(item => (
             <Book key={item.id} book={item} />
             ))}
       </div>
@@ -37,7 +43,8 @@ function Home(props) {
 }
 
 export default connect(
-  state => ({
-    booksData: state.books
-  }), dispatch => ({})
+  state => {
+    console.log(state.firestore)
+    return {firestore: state.firestore}
+  }, dispatch => ({})
 )(Home);
