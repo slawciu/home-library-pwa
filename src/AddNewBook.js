@@ -10,7 +10,6 @@ import { withFirestore } from 'react-redux-firebase'
 import './App.css';
 
 function AddNewBook(props) {
-  const [scannerIsActive, setScannerIsActive] = useState(false)
   const [results, setResults] = useState([])
   const scannerSupported = useQuagga()
   const [isbn, setIsbn] = useState('')
@@ -37,44 +36,37 @@ function AddNewBook(props) {
 
   return (
     <div>
-      {results.length === 0 ? <div className="scannerArea">
+      {results.length === 0 && scannerSupported ? <div className="scannerArea">
         <ReactQuagga
           onDetected={(data) => {setResults(results => ([...results, data])); searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code)}}
         />
       </div> :
-      <form className="addNewBookForm" noValidate autoComplete="off">
-        <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
-        <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
-        <TextField variant="standard" label="ISBN" value={isbn} onChange={event => setIsbn(event.target.value)} />
-        <FormControl>
-          <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
-          <NativeSelect
-            value={location}
-            onChange={event => setlocation(event.target.value)}
-            inputProps={{
-              name: 'age',
-              id: 'age-native-simple',
-            }}
-          >
-            <option value={'Gliwice'}>Gliwice</option>
-            <option value={'Imielin'}>Imielin</option>
-          </NativeSelect>
-        </FormControl>
-      </form>}
-      <div className="actionButton">
-      <Fab onClick={() => { addNewBook({author, title, location, isbn}); props.history.push('/')}} >
-        <SaveIcon color="primary"/>
-      </Fab>
-      </div>
-     
-      {/* <div>
-        Status: {results.length > 0 && results[results.length - 1].codeResult.code}
-      </div>
-      <div className="scannerArea">
-        <ReactQuagga
-                onDetected={(data) => setResults(results => ([...results, data]))}
-              />
-      </div> */}
+      <div>
+        <form className="addNewBookForm" noValidate autoComplete="off">
+          <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
+          <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
+          <TextField variant="standard" label="ISBN" value={isbn} onChange={event => setIsbn(event.target.value)} />
+          <FormControl>
+            <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
+            <NativeSelect
+              value={location}
+              onChange={event => setlocation(event.target.value)}
+              inputProps={{
+                name: 'age',
+                id: 'age-native-simple',
+              }}
+            >
+              <option value={'Gliwice'}>Gliwice</option>
+              <option value={'Imielin'}>Imielin</option>
+            </NativeSelect>
+          </FormControl>
+        </form>
+        <div className="actionButton">
+          <Fab onClick={() => { addNewBook({author, title, location, isbn}); props.history.push('/')}} >
+            <SaveIcon color="primary"/>
+          </Fab>
+        </div>
+      </div>}
     </div>
   )
 }

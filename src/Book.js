@@ -96,7 +96,7 @@ function Book(props) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          ISBN: {book.ISBN}
+          ISBN: {book.isbn}
         </CardContent>
       </Collapse>
     </Card>
