@@ -97,6 +97,10 @@ function Book(props) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           ISBN: {book.isbn}
+          {book.metadata && <div>
+            <p>Dodane przez: {book.metadata.name}</p>
+            <p>Dodane w dniu: {new Date(book.metadata.time).toDateString()}</p>
+          </div>}
         </CardContent>
       </Collapse>
     </Card>

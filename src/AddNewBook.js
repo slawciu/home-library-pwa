@@ -7,7 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import ReactQuagga, {useQuagga} from './ReactQuagga';
-import { withFirestore } from 'react-redux-firebase'
+import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
 
 function AddNewBook(props) {
@@ -19,14 +19,20 @@ function AddNewBook(props) {
   const [location, setLocation] = useState('Gliwice')
   const [scanInProgress, setScanInProgress] = useState(true)
   const addNewBook = book => {
-    props.firestore.add('books', book)
+    const currentUser = props.firebase.auth().currentUser
+    const metadata = {
+      name: currentUser.displayName,
+      time: new Date().toISOString(),
+      uid: currentUser.uid
+    }
+
+    props.firestore.add('books', {...book, metadata})
   }
 
   const searchBookDetails = async isbn => {
     const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=AIzaSyDbWJY0AUKjfJKBAv7ORWzRL3imE2TU1kk`;
     const response = await fetch(uri)
     const bookInfo = await response.json();
-    console.log(isbn, bookInfo)
     if (bookInfo.items.length > 0) {
       let title = bookInfo.items[0].volumeInfo.title;
       let author = bookInfo.items[0].volumeInfo.authors[0];
@@ -85,4 +91,4 @@ function AddNewBook(props) {
   )
 }
 
-export default withFirestore(AddNewBook);
+export default withFirebase(withFirestore(AddNewBook));
