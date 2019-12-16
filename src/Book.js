@@ -15,6 +15,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { withFirestore, withFirebase } from 'react-redux-firebase'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -44,6 +45,11 @@ function Book(props) {
   const {book} = props;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [start, setStart] = React.useState(new Date());
+
+  const removeBook = bookId => {
+    props.firestore.delete(`books/${bookId}`)
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -80,7 +86,13 @@ function Book(props) {
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="delete">
+        <IconButton onTouchStart={() => setStart(new Date())} onTouchEndCapture={() => {
+          console.log(new Date() - start)
+          if (new Date() - start > 3000) {
+            removeBook(book.id)
+            console.log('remove')
+          }
+        }} aria-label="delete">
           <DeleteIcon />
         </IconButton>
         <IconButton
@@ -108,4 +120,4 @@ function Book(props) {
 }
 
 
-export default Book;
+export default withFirebase(withFirestore(Book));

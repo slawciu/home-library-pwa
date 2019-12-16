@@ -33,6 +33,8 @@
 }
 
 .bookList {
+  height: 80vh;
+  overflow: overlay;
 }
 
 .bottomIcons {
