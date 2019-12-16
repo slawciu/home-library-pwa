@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -70,19 +70,18 @@ function Book(props) {
         image={book.picture}
         title={book.title}
       />}
-      <CardContent>
-        {book.description && 
+      {book.description && <CardContent>
+        
           <Typography variant="body2" color="textSecondary" component="p">
               {book.description}
           </Typography> 
-        }
-      </CardContent>
+      </CardContent>}
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <IconButton aria-label="delete">
+          <DeleteIcon />
         </IconButton>
         <IconButton
           className={clsx(classes.expand, {

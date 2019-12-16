@@ -22,8 +22,25 @@
 .actionButton {
   position: fixed;
   z-index: 1;
-  bottom: 30px;
-  right: 40px;
+  bottom: 80px;
+  right: 60px;
+}
+
+.homeScreen {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookList {
+}
+
+.bottomIcons {
+  position: fixed;
+  z-index: 1;
+  bottom: 0px;
+  right: 0;
+  width: 100%;
 }
 
 .scannerArea {
