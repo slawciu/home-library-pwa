@@ -26,6 +26,7 @@ function AddNewBook(props) {
     const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=AIzaSyDbWJY0AUKjfJKBAv7ORWzRL3imE2TU1kk`;
     const response = await fetch(uri)
     const bookInfo = await response.json();
+    console.log(isbn, bookInfo)
     if (bookInfo.items.length > 0) {
       let title = bookInfo.items[0].volumeInfo.title;
       let author = bookInfo.items[0].volumeInfo.authors[0];
@@ -51,9 +52,14 @@ function AddNewBook(props) {
       </div> :
       <div>
         <form className="addNewBookForm" noValidate autoComplete="off">
+          <TextField variant="standard" label="ISBN" value={isbn} onChange={async event => {
+            setIsbn(event.target.value);
+            if (event.target.value.length === 13) {
+              await searchBookDetails(event.target.value)
+            }
+          }} />
           <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
           <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
-          <TextField variant="standard" label="ISBN" value={isbn} onChange={event => setIsbn(event.target.value)} />
           <FormControl>
             <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
             <NativeSelect

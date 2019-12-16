@@ -28,7 +28,6 @@ const rrfConfig = {
   useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
 }
 try {
-
   firebase.initializeApp(fbConfig)
 } catch(e) { console.log(e) }
 firebase.firestore().enablePersistence();
