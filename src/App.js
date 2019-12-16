@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Home from './Home';
 import Fallback from './Fallback';
 import AddNewBook from './AddNewBook';
-
+import { withFirebase } from 'react-redux-firebase'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,7 +12,34 @@ import {
 import Header from './Header';
 import './App.css';
 
-function App() {
+function App(props) {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+      props.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false
+    }
+  };
+
+  useEffect(() => {
+    return props.firebase.auth().onAuthStateChanged(
+      user => {
+        setIsSignedIn(!!user)})
+  })
+  
+  if (!isSignedIn) {
+    return <div>
+       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={props.firebase.auth()}/>
+    </div>
+  }
+
   return (
     <Router>
       <div className="App">
@@ -31,4 +59,4 @@ function App() {
   );
 }
 
-export default App;
+export default withFirebase(App);
