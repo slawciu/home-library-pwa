@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
+import CloseIcon from '@material-ui/icons/Close';
 import Fab from '@material-ui/core/Fab';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,7 +17,7 @@ function AddNewBook(props) {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [location, setLocation] = useState('Gliwice')
-
+  const [scanInProgress, setScanInProgress] = useState(true)
   const addNewBook = book => {
     props.firestore.add('books', book)
   }
@@ -34,12 +35,19 @@ function AddNewBook(props) {
     }
   }
 
+  
+
   return (
     <div>
-      {results.length === 0 && scannerSupported ? <div className="scannerArea">
+      {scanInProgress && results.length === 0 && scannerSupported ? <div className="scannerArea">
         <ReactQuagga
           onDetected={(data) => {setResults(results => ([...results, data])); searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code)}}
         />
+        <div className="actionButton">
+          <Fab onClick={() => setScanInProgress(false)} >
+            <CloseIcon color="primary"/>
+          </Fab>
+        </div>
       </div> :
       <div>
         <form className="addNewBookForm" noValidate autoComplete="off">

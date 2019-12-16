@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
-import { createStore, combineReducers, compose } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { ReactReduxFirebaseProvider, firebaseReducer } from 'react-redux-firebase';
 import appReducers from './reducers';
 import './index.css';
@@ -31,7 +31,7 @@ try {
 
   firebase.initializeApp(fbConfig)
 } catch(e) { console.log(e) }
-firebase.firestore();
+firebase.firestore().enablePersistence();
 // Add firebase to reducers
 const rootReducer = combineReducers({
   app: appReducers,
