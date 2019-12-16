@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
 import { withFirebase } from 'react-redux-firebase';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,7 +37,7 @@ function Header(props) {
               Biblioteka Morisków
             </Link>
           </Typography>
-          <Button color="inherit" onClick={() => props.firebase.auth().signOut()}>Logout</Button>
+          <Button color="inherit" onClick={() => props.firebase.auth().signOut()}><ExitToAppIcon/></Button>
         </Toolbar>
       </AppBar>
     </div>
