@@ -20,12 +20,6 @@ const isLocalhost = Boolean(
     )
 );
 
-const staticCacheName = 'site-static';
-const assets = [
-  '/',
-  'index.html'
-]
-
 export function register(config) {
   if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
@@ -37,19 +31,8 @@ export function register(config) {
       return;
     }
 
-    window.addEventListener('install', evt => {
-      caches.open(staticCacheName).then(cache => {
-        cache.addAll(assets)
-      })
-      console.log('cached!')
-    })
-
-    window.addEventListener('fetch', evt => {
-      console.log('fetch', evt)
-    })
-
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.

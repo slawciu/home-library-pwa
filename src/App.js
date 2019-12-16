@@ -1,5 +1,6 @@
 import React from 'react';
 import Home from './Home';
+import Fallback from './Fallback';
 import AddNewBook from './AddNewBook';
 
 import {
@@ -18,6 +19,7 @@ function App() {
         <div className="content">
           <Switch>
             <Route path="/add" component={AddNewBook} />
+            <Route path="/fallback" component={Fallback} />
             <Route path="/">
               <Home />
             </Route>

@@ -30,7 +30,7 @@ const rrfConfig = {
 try {
   firebase.initializeApp(fbConfig)
 } catch(e) { console.log(e) }
-firebase.firestore().enablePersistence();
+firebase.firestore().enablePersistence({synchronizeTabs:true});
 // Add firebase to reducers
 const rootReducer = combineReducers({
   app: appReducers,
