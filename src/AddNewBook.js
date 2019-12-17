@@ -10,14 +10,20 @@ import ReactQuagga, {useQuagga} from './ReactQuagga';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
 
+const SCAN_ISBN = 'SCAN_ISBN';
+const FILL_BOOK_INFO = 'FILL_BOOK_INFO';
+const TAKE_PHOTO = 'TAKE_PHOTO';
+
 function AddNewBook(props) {
-  const [results, setResults] = useState([])
-  const scannerSupported = useQuagga()
-  const [isbn, setIsbn] = useState('')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [location, setLocation] = useState('Gliwice')
-  const [scanInProgress, setScanInProgress] = useState(true)
+  const [results, setResults] = useState([]);
+  const scannerSupported = useQuagga();
+  const [isbn, setIsbn] = useState('');
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [location, setLocation] = useState('Gliwice');
+  const [scanInProgress, setScanInProgress] = useState(true);
+  const [step, changeStep] = useState(SCAN_ISBN)
+
   const addNewBook = book => {
     const currentUser = props.firebase.auth().currentUser
     const metadata = {
@@ -42,51 +48,65 @@ function AddNewBook(props) {
     }
   }
 
-  
+  const renderStep = step => {
+    switch(step) {
+      case SCAN_ISBN:
+        return (
+          <div className="scannerArea">
+            <ReactQuagga
+              onDetected={(data) => {setResults(results => ([...results, data])); searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code)}}
+            />
+            <div className="actionButton">
+              <Fab onClick={() => changeStep(TAKE_PHOTO)} >
+                <CloseIcon color="primary"/>
+              </Fab>
+            </div>
+          </div>
+        );
+      case FILL_BOOK_INFO:
+        return (
+          <div>
+            <form className="addNewBookForm" noValidate autoComplete="off">
+              <TextField variant="standard" label="ISBN" value={isbn} onChange={async event => {
+                setIsbn(event.target.value);
+                if (event.target.value.length === 13) {
+                  await searchBookDetails(event.target.value)
+                }
+              }} />
+              <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
+              <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
+              <FormControl>
+                <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
+                <NativeSelect
+                  value={location}
+                  onChange={event => setLocation(event.target.value)}
+                  inputProps={{
+                    name: 'age',
+                    id: 'age-native-simple',
+                  }}
+                >
+                  <option value={'Gliwice'}>Gliwice</option>
+                  <option value={'Imielin'}>Imielin</option>
+                </NativeSelect>
+              </FormControl>
+            </form>
+            <div className="actionButton">
+              <Fab onClick={() => { addNewBook({author, title, location, isbn}); props.history.push('/')}} >
+                <SaveIcon color="primary"/>
+              </Fab>
+            </div>
+          </div>
+        );
+      case TAKE_PHOTO:
+        return (<div>Take a photo</div>);
+      default:
+        return <span />
+    }
+  }
 
   return (
     <div>
-      {scanInProgress && results.length === 0 && scannerSupported ? <div className="scannerArea">
-        <ReactQuagga
-          onDetected={(data) => {setResults(results => ([...results, data])); searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code)}}
-        />
-        <div className="actionButton">
-          <Fab onClick={() => setScanInProgress(false)} >
-            <CloseIcon color="primary"/>
-          </Fab>
-        </div>
-      </div> :
-      <div>
-        <form className="addNewBookForm" noValidate autoComplete="off">
-          <TextField variant="standard" label="ISBN" value={isbn} onChange={async event => {
-            setIsbn(event.target.value);
-            if (event.target.value.length === 13) {
-              await searchBookDetails(event.target.value)
-            }
-          }} />
-          <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
-          <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
-          <FormControl>
-            <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
-            <NativeSelect
-              value={location}
-              onChange={event => setLocation(event.target.value)}
-              inputProps={{
-                name: 'age',
-                id: 'age-native-simple',
-              }}
-            >
-              <option value={'Gliwice'}>Gliwice</option>
-              <option value={'Imielin'}>Imielin</option>
-            </NativeSelect>
-          </FormControl>
-        </form>
-        <div className="actionButton">
-          <Fab onClick={() => { addNewBook({author, title, location, isbn}); props.history.push('/')}} >
-            <SaveIcon color="primary"/>
-          </Fab>
-        </div>
-      </div>}
+      {renderStep(step)}
     </div>
   )
 }
