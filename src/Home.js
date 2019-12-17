@@ -23,14 +23,13 @@ const sortBooks = (books, order) => {
   }
 }
 
-function Home() {
+function Home(props) {
   useFirestoreConnect([
     { collection: 'books' }
   ])
   const [order, setOrder] = useState('title')
-  const [filter, setFilter] = useState('')
   const rawBooks = useSelector(state => state.firestore.ordered.books)
-  
+  const {filter} = props;
   const books = sortBooks(_.filter(rawBooks, x => {
     return Object.values({t: x.title, a: x.author, l: x.location}).some(x => x.toLowerCase().toString().indexOf(filter.toLowerCase()) > -1)
   }), order)
@@ -42,10 +41,6 @@ function Home() {
             <AddIcon color="primary"/>
           </Fab>
         </div>
-        <TextField
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-        />
         <div className="bookList">
           {rawBooks && books.map(item => (
           <Book key={item.id} book={item} />
@@ -70,6 +65,8 @@ function Home() {
 
 export default connect(
   state => {
-    return {firestore: state.firestore}
+    return {
+      filter: state.app.display.filter
+    }
   }, dispatch => ({})
 )(Home);

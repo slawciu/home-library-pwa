@@ -110,6 +110,7 @@ function AddNewBook(props) {
                 >
                   <option value={'Gliwice'}>Gliwice</option>
                   <option value={'Imielin'}>Imielin</option>
+                  <option value={'Kraków'}>Kraków</option>
                 </NativeSelect>
               </FormControl>
             </form>

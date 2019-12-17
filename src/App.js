@@ -34,24 +34,21 @@ function App(props) {
         setIsSignedIn(!!user)})
   })
   
-  if (!isSignedIn) {
-    return <div>
-       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={props.firebase.auth()}/>
-    </div>
-  }
-
   return (
     <Router>
       <div className="App">
-        <Header />
+        <Header isSignedIn={isSignedIn} />
         <div className="content">
-          <Switch>
+        {!isSignedIn && <div>
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={props.firebase.auth()}/>
+          </div>}
+          {isSignedIn && <Switch>
             <Route path="/add" component={AddNewBook} />
             <Route path="/fallback" component={Fallback} />
             <Route path="/">
               <Home />
             </Route>
-          </Switch>
+          </Switch>}
         </div>
       </div>
     </Router>
