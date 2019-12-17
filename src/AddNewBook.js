@@ -65,11 +65,12 @@ function AddNewBook(props) {
           <div className="scannerArea">
             <ReactQuagga
               onDetected={(data) => { 
-                setResults({...results, [data.codeResult.code]: data}); 
-               
+                setResults({...results, [data.codeResult.code]: data});
+                navigator.vibrate([200])
+                selectScannedIsbn(data.codeResult.code)
               }}
             />
-            <List component="nav" aria-label="secondary mailbox folders">
+            {/* <List component="nav" aria-label="secondary mailbox folders">
               {Object.keys(results).map(code => {
                 return (
                   <ListItem button key={code} onClick={() => selectScannedIsbn(code)}>
@@ -77,8 +78,7 @@ function AddNewBook(props) {
                   </ListItem>
                 )
               })}
-              
-            </List>
+            </List> */}
             <div className="actionButton">
               <Fab onClick={() => changeStep(TAKE_PHOTO)} >
                 <CloseIcon color="primary"/>

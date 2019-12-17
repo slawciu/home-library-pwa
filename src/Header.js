@@ -66,9 +66,6 @@ function Header(props) {
             </Link>}
             {isSignedIn && 
               <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
                 <InputBase
                   placeholder="Szukaj..."
                   classes={{
