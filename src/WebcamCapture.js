@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Webcam from "react-webcam";
 import { useFirebase } from 'react-redux-firebase'
+import CameraIcon from '@material-ui/icons/Camera';
+import Fab from '@material-ui/core/Fab';
 
 const videoConstraints = {
   width: 640,
@@ -29,17 +31,20 @@ const WebcamCapture = (props) => {
   );
  
   return (
-    <>
+    <div className="scannerArea">
       <Webcam
         audio={false}
-        height={720}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        width={1280}
+        width={`100%`}
         videoConstraints={videoConstraints}
       />
-      <button onClick={capture}>Capture photo</button>
-    </>
+      <div className="actionButton">
+        <Fab onClick={capture} >
+          <CameraIcon color="primary"/>
+        </Fab>
+      </div>
+    </div>
   );
 };
 

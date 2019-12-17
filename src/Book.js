@@ -123,7 +123,7 @@ function Book(props) {
             <p>Dodane przez: {book.metadata.name}</p>
             <p>Dodane w dniu: {new Date(book.metadata.time).toDateString()}</p>
             <div>
-              <img className='bookCover' src={image} />
+              <img className='bookCover' alt={`${book.title} cover`} src={image} />
             </div>
           </div>
           }

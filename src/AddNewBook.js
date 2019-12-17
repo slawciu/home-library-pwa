@@ -6,7 +6,7 @@ import Fab from '@material-ui/core/Fab';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import ReactQuagga, {useQuagga} from './ReactQuagga';
+import ReactQuagga from './ReactQuagga';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
 import WebcamCapture from "./WebcamCapture";
@@ -16,8 +16,6 @@ const FILL_BOOK_INFO = 'FILL_BOOK_INFO';
 const TAKE_PHOTO = 'TAKE_PHOTO';
 
 function AddNewBook(props) {
-  const [results, setResults] = useState([]);
-  const scannerSupported = useQuagga();
   const [isbn, setIsbn] = useState('');
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -41,7 +39,7 @@ function AddNewBook(props) {
     const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=AIzaSyDbWJY0AUKjfJKBAv7ORWzRL3imE2TU1kk`;
     const response = await fetch(uri)
     const bookInfo = await response.json();
-    if (bookInfo.items.length > 0) {
+    if (bookInfo.items && bookInfo.items.length > 0) {
       let title = bookInfo.items[0].volumeInfo.title;
       let author = bookInfo.items[0].volumeInfo.authors[0];
 
@@ -56,7 +54,7 @@ function AddNewBook(props) {
         return (
           <div className="scannerArea">
             <ReactQuagga
-              onDetected={(data) => {setResults(results => ([...results, data])); searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code)}}
+              onDetected={(data) => { searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code); changeStep(TAKE_PHOTO);}}
             />
             <div className="actionButton">
               <Fab onClick={() => changeStep(TAKE_PHOTO)} >
