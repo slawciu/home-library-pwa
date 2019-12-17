@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
+import 'firebase/storage';
 import { createStore, combineReducers } from 'redux';
 import { ReactReduxFirebaseProvider, firebaseReducer } from 'react-redux-firebase';
 import appReducers from './reducers';

@@ -37,6 +37,10 @@
   overflow: overlay;
 }
 
+.bookCover {
+  width: 100%;
+}
+
 .bottomIcons {
   position: fixed;
   z-index: 1;

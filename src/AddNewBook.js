@@ -9,6 +9,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import ReactQuagga, {useQuagga} from './ReactQuagga';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
+import WebcamCapture from "./WebcamCapture";
 
 const SCAN_ISBN = 'SCAN_ISBN';
 const FILL_BOOK_INFO = 'FILL_BOOK_INFO';
@@ -21,7 +22,7 @@ function AddNewBook(props) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [location, setLocation] = useState('Gliwice');
-  const [scanInProgress, setScanInProgress] = useState(true);
+  const [fileName, setFileName] = useState('');
   const [step, changeStep] = useState(SCAN_ISBN)
 
   const addNewBook = book => {
@@ -29,7 +30,8 @@ function AddNewBook(props) {
     const metadata = {
       name: currentUser.displayName,
       time: new Date().toISOString(),
-      uid: currentUser.uid
+      uid: currentUser.uid,
+      fileName: fileName
     }
 
     props.firestore.add('books', {...book, metadata})
@@ -98,7 +100,14 @@ function AddNewBook(props) {
           </div>
         );
       case TAKE_PHOTO:
-        return (<div>Take a photo</div>);
+        return (
+          <div>
+            <WebcamCapture onScanComplete={file => { 
+              setFileName(file);
+              changeStep(FILL_BOOK_INFO);
+              }} 
+            />
+          </div>);
       default:
         return <span />
     }

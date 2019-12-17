@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -16,6 +16,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
+import { useFirebase } from 'react-redux-firebase'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -46,14 +47,25 @@ function Book(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [start, setStart] = useState(new Date());
-
+  const [image, setImage] = useState('')
   const removeBook = bookId => {
     props.firestore.delete(`books/${bookId}`)
   }
-
+  const firebase = useFirebase();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  useEffect(() => {
+    if (book.metadata && book.metadata.fileName) {
+      const loadUrl = async () => {
+        const url = await firebase.storage().ref(`bookCovers/${book.metadata.fileName}`).getDownloadURL();
+        console.log(url);
+        setImage(url)
+      };
+      loadUrl()
+    }
+  }, [])
 
   return (
     <Card className={classes.card}>
@@ -110,7 +122,11 @@ function Book(props) {
           {book.metadata && <div>
             <p>Dodane przez: {book.metadata.name}</p>
             <p>Dodane w dniu: {new Date(book.metadata.time).toDateString()}</p>
-          </div>}
+            <div>
+              <img className='bookCover' src={image} />
+            </div>
+          </div>
+          }
         </CardContent>
       </Collapse>
     </Card>
