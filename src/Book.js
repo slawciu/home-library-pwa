@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -44,8 +44,8 @@ const useStyles = makeStyles(theme => ({
 function Book(props) {
   const {book} = props;
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-  const [start, setStart] = React.useState(new Date());
+  const [expanded, setExpanded] = useState(false);
+  const [start, setStart] = useState(new Date());
 
   const removeBook = bookId => {
     props.firestore.delete(`books/${bookId}`)
@@ -77,7 +77,6 @@ function Book(props) {
         title={book.title}
       />}
       {book.description && <CardContent>
-        
           <Typography variant="body2" color="textSecondary" component="p">
               {book.description}
           </Typography> 
@@ -87,10 +86,9 @@ function Book(props) {
           <FavoriteIcon />
         </IconButton>
         <IconButton onTouchStart={() => setStart(new Date())} onTouchEndCapture={() => {
-          console.log(new Date() - start)
           if (new Date() - start > 3000) {
-            removeBook(book.id)
-            console.log('remove')
+            removeBook(book.id);
+            navigator.vibrate([500])
           }
         }} aria-label="delete">
           <DeleteIcon />
