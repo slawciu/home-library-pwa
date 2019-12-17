@@ -51,7 +51,7 @@ function Home() {
           <Book key={item.id} book={item} />
           ))}
         </div>
-        <div className="bottomIcons">
+        {/* <div className="bottomIcons">
           <BottomNavigation
             value={order}
             onChange={(event, newValue) => {
@@ -63,7 +63,7 @@ function Home() {
             <BottomNavigationAction label="Autor" value="author" icon={<PersonIcon />} />
             <BottomNavigationAction label="Lokalizacja" value="location" icon={<LocationOnIcon />} />
           </BottomNavigation>
-        </div>
+        </div> */}
     </div>
   );
 }

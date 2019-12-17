@@ -10,12 +10,16 @@ import ReactQuagga from './ReactQuagga';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
 import WebcamCapture from "./WebcamCapture";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const SCAN_ISBN = 'SCAN_ISBN';
 const FILL_BOOK_INFO = 'FILL_BOOK_INFO';
 const TAKE_PHOTO = 'TAKE_PHOTO';
 
 function AddNewBook(props) {
+  const [results, setResults] = useState({});
   const [isbn, setIsbn] = useState('');
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -48,14 +52,33 @@ function AddNewBook(props) {
     }
   }
 
+  const selectScannedIsbn = isbn => {
+    searchBookDetails(isbn); 
+    setIsbn(isbn); 
+    changeStep(TAKE_PHOTO);
+  }
+
   const renderStep = step => {
     switch(step) {
       case SCAN_ISBN:
         return (
           <div className="scannerArea">
             <ReactQuagga
-              onDetected={(data) => { searchBookDetails(data.codeResult.code); setIsbn(data.codeResult.code); changeStep(TAKE_PHOTO);}}
+              onDetected={(data) => { 
+                setResults({...results, [data.codeResult.code]: data}); 
+               
+              }}
             />
+            <List component="nav" aria-label="secondary mailbox folders">
+              {Object.keys(results).map(code => {
+                return (
+                  <ListItem button key={code} onClick={() => selectScannedIsbn(code)}>
+                    <ListItemText primary={code} />
+                  </ListItem>
+                )
+              })}
+              
+            </List>
             <div className="actionButton">
               <Fab onClick={() => changeStep(TAKE_PHOTO)} >
                 <CloseIcon color="primary"/>

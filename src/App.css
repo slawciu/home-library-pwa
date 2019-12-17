@@ -22,8 +22,8 @@
 .actionButton {
   position: fixed;
   z-index: 1;
-  bottom: 80px;
-  right: 60px;
+  bottom: 20px;
+  right: 20px;
 }
 
 .homeScreen {
@@ -34,7 +34,6 @@
 
 .bookList {
   height: 80vh;
-  overflow: overlay;
 }
 
 .bookCover {
