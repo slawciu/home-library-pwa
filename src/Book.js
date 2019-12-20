@@ -70,7 +70,7 @@ function Book(props) {
     <Card className={classes.card}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+          <Avatar aria-label="location" className={classes.avatar}>
             {book.location[0]}
           </Avatar>
         }

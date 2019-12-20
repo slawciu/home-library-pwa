@@ -39,7 +39,7 @@ function App(props) {
       <div className="App">
         <Header isSignedIn={isSignedIn} />
         <div className="content">
-        {!isSignedIn && <div>
+        {isSignedIn !== undefined && !isSignedIn && <div>
             <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={props.firebase.auth()}/>
           </div>}
           {isSignedIn && <Switch>
