@@ -12,6 +12,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import {setFilter} from './actions/display';
 import { connect } from 'react-redux';
+import { addBookStates } from './actions/books'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 function Header(props) {
   const classes = useStyles();
-  const {isSignedIn, setFilter} = props;
+  const {isSignedIn, setFilter, addBookState} = props;
 
   return (
     <div className={classes.root}>
@@ -61,10 +62,10 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            {!isSignedIn && <Link href={'/'} color="inherit">
+            {(!isSignedIn || addBookState != addBookStates.NONE) && <Link href={'/'} color="inherit">
               Biblioteka Morisków
             </Link>}
-            {isSignedIn && 
+            {isSignedIn && addBookState === addBookStates.NONE && 
               <div className={classes.search}>
                 <InputBase
                   placeholder="Szukaj..."
@@ -87,7 +88,8 @@ function Header(props) {
   );
 }
 
-export default withFirebase(connect(state => {
-}, dispatch => ({
+export default withFirebase(connect(state => ({
+  addBookState: state.app.books.addBookState
+}), dispatch => ({
   setFilter: filter => dispatch(setFilter(filter))
 }))(Header))

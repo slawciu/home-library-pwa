@@ -60,7 +60,6 @@ function Book(props) {
     if (book.metadata && book.metadata.fileName) {
       const loadUrl = async () => {
         const url = await firebase.storage().ref(`bookCovers/${book.metadata.fileName}`).getDownloadURL();
-        console.log(url);
         setImage(url)
       };
       loadUrl()

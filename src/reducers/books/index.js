@@ -1,36 +1,12 @@
-const books = (state = [{
-  id: '1',
-  ISBN: '9788376486123',
-  title: 'Gra Endera',
-  author: 'Orson Scott Card',
-  location: 'Gliwice',
-  description: `Gra Endera – książka z gatunku science fiction, najbardziej znana powieść Orsona Scotta Carda. Jest pierwszą z cyklu powieści o tytułowym Enderze. Pierwsze wydanie w 1985 ukazało się nakładem Tor Books.`,
+import {addBookStates} from '../../actions/books'
 
-}, {
-  id: '2',
-  ISBN: '9788376486123',
-  title: 'Gra Endera 2',
-  author: 'Orson Scott Card',
-  location: 'Imielin',
-  description: `Gra Endera – książka z gatunku science fiction, najbardziej znana powieść Orsona Scotta Carda. Jest pierwszą z cyklu powieści o tytułowym Enderze. Pierwsze wydanie w 1985 ukazało się nakładem Tor Books.`,
-
-}, {
-  id: '3',
-  ISBN: '9788376486123',
-  title: 'Gra Endera 3',
-  author: 'Orson Scott Card',
-  location: 'Sosnowiec',
-  description: `Gra Endera – książka z gatunku science fiction, najbardziej znana powieść Orsona Scotta Carda. Jest pierwszą z cyklu powieści o tytułowym Enderze. Pierwsze wydanie w 1985 ukazało się nakładem Tor Books.`,
-
-}], action) => {
+const books = (state = {list: [], addBookState: addBookStates.NONE}, action) => {
   switch (action.type) {
-    case 'ADD_BOOK':
-      return [
+    case 'CHANGE_ADD_BOOK_STATE':
+      return {
         ...state,
-        {
-          ...action.payload
-        }
-      ]
+        addBookState: action.payload
+      }
     default:
       return state
   }

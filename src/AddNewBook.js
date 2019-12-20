@@ -13,10 +13,8 @@ import WebcamCapture from "./WebcamCapture";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-
-const SCAN_ISBN = 'SCAN_ISBN';
-const FILL_BOOK_INFO = 'FILL_BOOK_INFO';
-const TAKE_PHOTO = 'TAKE_PHOTO';
+import { addBookStates, changeAddBookState } from './actions/books' 
+import {connect} from 'react-redux';
 
 function AddNewBook(props) {
   const [results, setResults] = useState({});
@@ -25,7 +23,7 @@ function AddNewBook(props) {
   const [author, setAuthor] = useState('');
   const [location, setLocation] = useState('Gliwice');
   const [fileName, setFileName] = useState('');
-  const [step, changeStep] = useState(SCAN_ISBN)
+  const {changeStep, step} = props;
 
   const addNewBook = book => {
     const currentUser = props.firebase.auth().currentUser
@@ -55,12 +53,12 @@ function AddNewBook(props) {
   const selectScannedIsbn = isbn => {
     searchBookDetails(isbn); 
     setIsbn(isbn); 
-    changeStep(TAKE_PHOTO);
+    changeStep(addBookStates.TAKE_PHOTO);
   }
 
   const renderStep = step => {
     switch(step) {
-      case SCAN_ISBN:
+      case addBookStates.SCAN_ISBN:
         return (
           <div className="scannerArea">
             <ReactQuagga
@@ -80,13 +78,13 @@ function AddNewBook(props) {
               })}
             </List> */}
             <div className="actionButton">
-              <Fab onClick={() => changeStep(TAKE_PHOTO)} >
+              <Fab onClick={() => changeStep(addBookStates.TAKE_PHOTO)} >
                 <CloseIcon color="primary"/>
               </Fab>
             </div>
           </div>
         );
-      case FILL_BOOK_INFO:
+      case addBookStates.FILL_BOOK_INFO:
         return (
           <div>
             <form className="addNewBookForm" noValidate autoComplete="off">
@@ -115,21 +113,27 @@ function AddNewBook(props) {
               </FormControl>
             </form>
             <div className="actionButton">
-              <Fab onClick={() => { addNewBook({author, title, location, isbn}); props.history.push('/')}} >
+              <Fab onClick={() => { 
+                addNewBook({author, title, location, isbn});
+                changeStep(addBookStates.NONE)
+                props.history.push('/')}
+                } >
                 <SaveIcon color="primary"/>
               </Fab>
             </div>
           </div>
         );
-      case TAKE_PHOTO:
+      case addBookStates.TAKE_PHOTO:
         return (
           <div>
             <WebcamCapture onScanComplete={file => { 
               setFileName(file);
-              changeStep(FILL_BOOK_INFO);
+              changeStep(addBookStates.FILL_BOOK_INFO);
               }} 
             />
           </div>);
+      case addBookStates.NONE:
+        changeStep(addBookStates.SCAN_ISBN)
       default:
         return <span />
     }
@@ -142,4 +146,10 @@ function AddNewBook(props) {
   )
 }
 
-export default withFirebase(withFirestore(AddNewBook));
+export default withFirebase(withFirestore(connect(
+  state => ({
+    step: state.app.books.addBookState
+  }), dispatch => ({
+    changeStep: step => dispatch(changeAddBookState(step))
+  })
+)(AddNewBook)));
