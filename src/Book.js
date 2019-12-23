@@ -53,7 +53,7 @@ function Book(props) {
   }
   const firebase = useFirebase();
   const handleExpandClick = () => {
-    setExpanded(!expanded);
+    setExpanded(!expanded); 
   };
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function Book(props) {
       };
       loadUrl()
     }
-  }, [])
+  }, [book.metadata, firebase])
 
   return (
     <Card className={classes.card}>

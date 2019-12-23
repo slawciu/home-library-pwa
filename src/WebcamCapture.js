@@ -12,22 +12,28 @@ const videoConstraints = {
  
 const WebcamCapture = (props) => {
   const firebase = useFirebase();
-
+  const {onScanComplete} = props;
   const webcamRef = React.useRef(null);
  
+  
+  
   const capture = React.useCallback(
     () => {
-      const imageSrc = webcamRef.current.getScreenshot();
-      const storageRef = firebase.storage().ref('bookCovers');
-      const fileName = `cover-${new Date().toISOString()}.jpg`;
-      const fileRef = storageRef.child(fileName);
-      fileRef.putString(imageSrc, 'data_url')
-        .then(x => console.log('uploaded', x))
-        .catch(e => console.log(e));
+      const saveImageToFirestore = imageSrc => {
+        const storageRef = firebase.storage().ref('bookCovers');
+        const fileName = `cover-${new Date().toISOString()}.jpg`;
+        const fileRef = storageRef.child(fileName);
+        fileRef.putString(imageSrc, 'data_url')
+          .then(x => console.log('uploaded', x))
+          .catch(e => console.log(e));
+        return fileName;
+      }
 
-      props.onScanComplete(fileName)
+      const imageSrc = webcamRef.current.getScreenshot();
+      const fileName = saveImageToFirestore(imageSrc)
+      onScanComplete(fileName)
     },
-    [webcamRef]
+    [webcamRef, onScanComplete, firebase]
   );
  
   return (

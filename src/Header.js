@@ -9,7 +9,6 @@ import { withFirebase } from 'react-redux-firebase';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import {setFilter} from './actions/display';
 import { connect } from 'react-redux';
 import { addBookStates } from './actions/books'
@@ -63,7 +62,7 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            {(!isSignedIn || addBookState != addBookStates.NONE) && <Link href={'/'} color="inherit">
+            {(!isSignedIn || addBookState !== addBookStates.NONE) && <Link href={'/'} color="inherit">
               Biblioteka Morisków
             </Link>}
             {isSignedIn && addBookState === addBookStates.NONE && 

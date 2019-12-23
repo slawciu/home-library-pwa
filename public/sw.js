@@ -47,7 +47,7 @@ self.addEventListener('activate', evt => {
 
 // fetch events
 self.addEventListener('fetch', evt => {
-  if(evt.request.url.indexOf('firestore.googleapis.com') === -1){
+  if(evt.request.url.indexOf('firestore.googleapis.com') === -1 && evt.request.url.indexOf('chrome-extension') === -1){
     evt.respondWith(
       caches.match(evt.request).then(cacheRes => {
         return cacheRes || fetch(evt.request).then(fetchRes => {
