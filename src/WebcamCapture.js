@@ -14,8 +14,6 @@ const WebcamCapture = (props) => {
   const firebase = useFirebase();
   const {onScanComplete} = props;
   const webcamRef = React.useRef(null);
- 
-  
   
   const capture = React.useCallback(
     () => {

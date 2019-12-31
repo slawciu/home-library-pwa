@@ -1,29 +1,20 @@
 import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import SaveIcon from '@material-ui/icons/Save';
-import CloseIcon from '@material-ui/icons/Close';
-import Fab from '@material-ui/core/Fab';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import ReactQuagga from './ReactQuagga';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
 import WebcamCapture from "./WebcamCapture";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { addBookStates, changeAddBookState } from './actions/books' 
+import { 
+  addBookStates,
+  changeAddBookState,
+  setScannedIsbn,
+  searchBookDetails
+ } from './actions/books'; 
 import {connect} from 'react-redux';
+import Scanner from './add-book/Scanner';
+import BookForm from './add-book/BookForm';
 
 function AddNewBook(props) {
-  const [results, setResults] = useState({});
-  const [isbn, setIsbn] = useState('');
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [location, setLocation] = useState('Gliwice');
   const [fileName, setFileName] = useState('');
-  const {changeStep, step} = props;
+  const {step} = props;
 
   const addNewBook = book => {
     const currentUser = props.firebase.auth().currentUser
@@ -37,123 +28,42 @@ function AddNewBook(props) {
     props.firestore.add('books', {...book, metadata})
   }
 
-  const searchBookDetails = async isbn => {
-    const booksRef = props.firestore.collection('books');
-    const existingBook = booksRef.where('isbn', '==', isbn)
-      .get()
-      .then(snapshot => {
-        if (snapshot.empty) {
-          return null;
-        } 
-        return snapshot
-          .docs[0]
-          .data()
-      });
-
-    let title = '';
-    let author = '';
-
-    if (existingBook) {
-      title = existingBook.title;
-      author = existingBook.author;  
-    } else {
-      const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=AIzaSyDbWJY0AUKjfJKBAv7ORWzRL3imE2TU1kk`;
-      const response = await fetch(uri)
-      const bookInfo = await response.json();
-      if (bookInfo.items && bookInfo.items.length > 0) {
-        title = bookInfo.items[0].volumeInfo.title;
-        author = bookInfo.items[0].volumeInfo.authors[0];
-      }
-    }
-
-    setAuthor(author);
-    setTitle(title);
+  const onIsbnDetected = isbn => { 
+    navigator.vibrate([200])
+    props.searchBookDetails(isbn); 
+    props.setScannedIsbn(isbn); 
+    props.changeAddBookState(addBookStates.TAKE_PHOTO);
   }
 
-  const selectScannedIsbn = isbn => {
-    searchBookDetails(isbn); 
-    setIsbn(isbn); 
-    changeStep(addBookStates.TAKE_PHOTO);
-  }
-  
   const renderStep = step => {
     switch(step) {
       case addBookStates.SCAN_ISBN:
         return (
-          <div className="scannerArea">
-            <ReactQuagga
-              onDetected={(data) => { 
-                setResults({...results, [data.codeResult.code]: data});
-                navigator.vibrate([200])
-                selectScannedIsbn(data.codeResult.code)
-              }}
-            />
-            {/* <List component="nav" aria-label="secondary mailbox folders">
-              {Object.keys(results).map(code => {
-                return (
-                  <ListItem button key={code} onClick={() => selectScannedIsbn(code)}>
-                    <ListItemText primary={code} />
-                  </ListItem>
-                )
-              })}
-            </List> */}
-            <div className="actionButton">
-              <Fab onClick={() => changeStep(addBookStates.TAKE_PHOTO)} >
-                <CloseIcon color="primary"/>
-              </Fab>
-            </div>
-          </div>
+          <Scanner
+            onDetected={onIsbnDetected}
+          />
         );
       case addBookStates.FILL_BOOK_INFO:
         return (
-          <div>
-            <form className="addNewBookForm" noValidate autoComplete="off">
-              <TextField variant="standard" label="ISBN" value={isbn} onChange={async event => {
-                setIsbn(event.target.value);
-                if (event.target.value.length === 13) {
-                  await searchBookDetails(event.target.value)
-                }
-              }} />
-              <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
-              <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
-              <FormControl>
-                <InputLabel htmlFor="age-native-simple">Lokalizacja</InputLabel>
-                <NativeSelect
-                  value={location}
-                  onChange={event => setLocation(event.target.value)}
-                  inputProps={{
-                    name: 'age',
-                    id: 'age-native-simple',
-                  }}
-                >
-                  <option value={'Gliwice'}>Gliwice</option>
-                  <option value={'Imielin'}>Imielin</option>
-                  <option value={'Kraków'}>Kraków</option>
-                </NativeSelect>
-              </FormControl>
-            </form>
-            <div className="actionButton">
-              <Fab onClick={() => { 
-                addNewBook({author, title, location, isbn});
-                changeStep(addBookStates.NONE)
-                props.history.push('/')}
-                } >
-                <SaveIcon color="primary"/>
-              </Fab>
-            </div>
-          </div>
+          <BookForm
+            onActionClicked={bookInfo => { 
+              addNewBook(bookInfo);
+              props.changeAddBookState(addBookStates.NONE)
+              props.history.push('/')
+            }} />
         );
       case addBookStates.TAKE_PHOTO:
         return (
           <div>
             <WebcamCapture onScanComplete={file => { 
               setFileName(file);
-              changeStep(addBookStates.FILL_BOOK_INFO);
+              props.changeAddBookState(addBookStates.FILL_BOOK_INFO);
               }} 
             />
           </div>);
       case addBookStates.NONE:
-        changeStep(addBookStates.SCAN_ISBN)
+        props.changeAddBookState(addBookStates.SCAN_ISBN)
+        break;
       default:
         return <span />
     }
@@ -170,6 +80,9 @@ export default withFirebase(withFirestore(connect(
   state => ({
     step: state.app.books.addBookState
   }), dispatch => ({
-    changeStep: step => dispatch(changeAddBookState(step))
+    changeStep: step => dispatch(changeAddBookState(step)),
+    setScannedIsbn: isbn => dispatch(setScannedIsbn(isbn)),
+    searchBookDetails: isbn => dispatch(searchBookDetails(isbn)),
+    changeAddBookState: state => dispatch(changeAddBookState(state))
   })
 )(AddNewBook)));
