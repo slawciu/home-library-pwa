@@ -6,7 +6,7 @@ import Fab from '@material-ui/core/Fab';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import ReactQuagga from './ReactQuagga';
+import ReactQuagga from './add-book/ReactQuagga';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import './App.css';
 import WebcamCapture from "./WebcamCapture";
