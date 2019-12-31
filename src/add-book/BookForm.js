@@ -7,7 +7,6 @@ import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import SaveIcon from '@material-ui/icons/Save';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
-import { searchBookDetails } from '../actions/books';
 
 function BookForm(props) {
   const [isbn, setIsbn] = useState(props.isbn);
