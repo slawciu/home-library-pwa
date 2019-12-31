@@ -19,6 +19,10 @@
   justify-content: center;
 }
 
+.manualIsbnInput {
+  margin-top: 30px;
+}
+
 .actionButton {
   position: fixed;
   z-index: 1;
