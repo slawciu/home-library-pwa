@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Book from './Book';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/LibraryAdd';
 import './App.css';
 import { useSelector } from 'react-redux';
@@ -11,11 +10,6 @@ import _ from 'lodash';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import SaveIcon from '@material-ui/icons/Save';
-import PrintIcon from '@material-ui/icons/Print';
-import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonIcon from '@material-ui/icons/Person';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 
@@ -74,9 +68,7 @@ const actions = [
 
 function Home(props) {
   const classes = useStyles();
-  const [direction, setDirection] = React.useState('up');
   const [open, setOpen] = React.useState(false);
-  const [hidden, setHidden] = React.useState(false);
   useFirestoreConnect([
     { collection: 'books' }
   ])
@@ -93,19 +85,19 @@ function Home(props) {
   const handleOpen = () => {
     setOpen(true);
   };
-  console.log(props)
+  
   return (
       <div className="homeScreen">
         <div className="actionButton">
         <SpeedDial
           ariaLabel="SpeedDial example"
           className={classes.speedDial}
-          hidden={hidden}
+          hidden={false}
           icon={<SpeedDialIcon />}
           onClose={handleClose}
           onOpen={handleOpen}
           open={open}
-          direction={direction}
+          direction={'up'}
         >
           {actions.map(action => (
             <SpeedDialAction

@@ -46,7 +46,7 @@ function Book(props) {
   const {book} = props;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [start, setStart] = useState(new Date());
+  const [timer, setTimer] = useState(null);
   const [image, setImage] = useState('')
   const removeBook = bookId => {
     props.firestore.delete(`books/${bookId}`)
@@ -96,11 +96,11 @@ function Book(props) {
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <IconButton onTouchStart={() => setStart(new Date())} onTouchEndCapture={() => {
-          if (new Date() - start > 3000) {
-            removeBook(book.id);
-            navigator.vibrate([500])
-          }
+        <IconButton onTouchStart={() => setTimer(setTimeout(() => {
+          removeBook(book.id);
+          navigator.vibrate([500])
+        }, 3000))} onTouchEndCapture={() => {
+          clearTimeout(timer)
         }} aria-label="delete">
           <DeleteIcon />
         </IconButton>
