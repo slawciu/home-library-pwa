@@ -45,9 +45,7 @@ function App(props) {
           {isSignedIn && <Switch>
             <Route path="/add" component={AddNewBook} />
             <Route path="/fallback" component={Fallback} />
-            <Route path="/">
-              <Home />
-            </Route>
+            <Route path="/" component={Home} />
           </Switch>}
         </div>
       </div>
