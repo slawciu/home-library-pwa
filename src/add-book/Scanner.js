@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactQuagga from './ReactQuagga';
+import ReactQuagga from '../camera/ReactQuagga';
 import EditIcon from '@material-ui/icons/Edit';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';

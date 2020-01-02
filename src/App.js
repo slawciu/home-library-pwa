@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Home from './Home';
 import Fallback from './Fallback';
-import AddNewBook from './AddNewBook';
+import AddNewBook from './add-book/AddNewBook';
 import { withFirebase } from 'react-redux-firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import {

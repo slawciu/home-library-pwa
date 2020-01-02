@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
-import './App.css';
-import WebcamCapture from "./WebcamCapture";
+import WebcamCapture from "../camera/WebcamCapture";
 import { 
   addBookStates,
   changeAddBookState,
   setScannedIsbn,
   searchBookDetails
- } from './actions/books'; 
+ } from '../actions/books'; 
 import {connect} from 'react-redux';
-import Scanner from './add-book/Scanner';
-import BookForm from './add-book/BookForm';
+import Scanner from './Scanner';
+import BookForm from './BookForm';
 
 function AddNewBook(props) {
   const [fileName, setFileName] = useState('');
