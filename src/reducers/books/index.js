@@ -1,8 +1,12 @@
-import {addBookStates} from '../../actions/books'
+import {
+  addBookStates,
+  lendBookStates
+} from '../../actions/books'
 
 const books = (state = {
   list: [], 
   addBookState: addBookStates.NONE,
+  lendBookState: lendBookStates.NONE,
   scannedIsbn: ''
 }, action) => {
   switch (action.type) {
@@ -10,6 +14,11 @@ const books = (state = {
       return {
         ...state,
         addBookState: action.payload
+      }
+    case 'CHANGE_LEND_BOOK_STATE':
+      return {
+        ...state,
+        lendBookState: action.payload
       }
     case 'SET_ISBN':
     case 'SET_SCANNED_ISBN':

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Home from './Home';
 import Fallback from './Fallback';
 import AddNewBook from './add-book/AddNewBook';
+import LendBook from './lend-book';
 import { withFirebase } from 'react-redux-firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import {
@@ -44,6 +45,7 @@ function App(props) {
           </div>}
           {isSignedIn && <Switch>
             <Route path="/add" component={AddNewBook} />
+            <Route path="/lend" component={LendBook} />
             <Route path="/fallback" component={Fallback} />
             <Route path="/" component={Home} />
           </Switch>}

@@ -5,6 +5,17 @@ export const addBookStates = {
   TAKE_PHOTO: 'TAKE_PHOTO'
 }
 
+export const lendBookStates = {
+  FILL_BORROWER_INFO: 'FILL_BORROWER_INFO',
+  NONE: 'NONE',
+  SCAN_ISBN: 'SCAN_ISBN'
+}
+
+export const changeLendBookState = newState => ({
+  type: 'CHANGE_LEND_BOOK_STATE',
+  payload: newState
+});
+
 export const changeAddBookState = newState => ({
   type: 'CHANGE_ADD_BOOK_STATE',
   payload: newState
@@ -50,21 +61,27 @@ export const setLocation = location => ({
   payload: location
 })
 
-export const searchBookDetails = isbn => {
-  return async (dispatch, getState, getFirebase) => {
-    const firebase = getFirebase();
-    const firestore = firebase.firestore();
-    const booksRef = firestore.collection('books');
-    const existingBook = await booksRef.where('isbn', '==', isbn)
+export const searchInFirestore = async (isbn, firestore) => {
+  const booksRef = firestore.collection('books');
+  const existingBook = await booksRef.where('isbn', '==', isbn)
       .get()
       .then(snapshot => {
         if (snapshot.empty) {
           return null;
         } 
-        return snapshot
-          .docs[0]
-          .data();
-      });
+        const doc = snapshot
+        .docs[0];
+        return {
+          ...doc.data(),
+          id: doc.id
+        }});
+  return existingBook;
+}
+
+export const searchBookDetails = isbn => {
+  return async (dispatch, getState, getFirebase) => {
+    const firebase = getFirebase();
+    const existingBook = await searchInFirestore(isbn, firebase.firestore())
   
     let title = '';
     let author = '';
