@@ -20,7 +20,8 @@ function BookForm(props) {
         <TextField
           variant="standard"
           label="ISBN"
-          value={isbn} 
+          value={isbn}
+          type="number"
           onChange={event => setIsbn(event.target.value)}
           />
         <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />

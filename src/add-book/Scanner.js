@@ -27,7 +27,8 @@ function Scanner(props) {
           <TextField 
             autoFocus
             variant="standard"
-            label="ISBN" 
+            label="ISBN"
+            type="number"
             value={isbn} 
             onChange={async event => {
               setIsbn(event.target.value);

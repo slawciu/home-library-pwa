@@ -12,25 +12,11 @@ import TextField from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Fab from '@material-ui/core/Fab';
 
-function BorrowerForm(props) {
-  const [bookHolder, setBookHolder] = useState('')
-  return (
-    <div>
-      <TextField variant="standard" label="Wypożyczający" value={bookHolder} onChange={event => setBookHolder(event.target.value)} />
-      <div className="actionButton">
-        <Fab onClick={() => props.onActionClicked({bookHolder})}>
-          <SaveIcon color="primary" />
-        </Fab>
-      </div>
-    </div>
-  )
-}
-
-function LendBook(props) {
+function ReturnBook(props) {
   const [book, setBook] = useState(null)
   const {step} = props;
 
-  const lendBook = async (bookHolder) => {
+  const returnBook = async (bookHolder) => {
     const currentUser = props.firebase.auth().currentUser
     const loanRef = await props.firestore.add('loans', {
       ...bookHolder,
@@ -49,35 +35,16 @@ function LendBook(props) {
 
   const onIsbnDetected = async isbn => { 
     navigator.vibrate([200])
-    const existingBook = await props.searchBookDetails(isbn, props.firestore);
+    const existingBook = await props.searchLentBookDetails(isbn, props.firestore);
     setBook({id: existingBook.id, isbn: existingBook.isbn})
     props.changeLendBookState(lendBookStates.FILL_BORROWER_INFO);
   }
 
   const renderStep = step => {
-    switch(step) {
-      case lendBookStates.SCAN_ISBN:
-        return (
-          <Scanner
-            onDetected={onIsbnDetected}
-          />
-        );
-      case lendBookStates.FILL_BORROWER_INFO:
-        return (
-          <BorrowerForm
-            onActionClicked={bookHolder => { 
-              lendBook(bookHolder);
-              props.changeLendBookState(lendBookStates.NONE);
-              props.setScannedIsbn('');
-              setBook(null);
-              props.history.push('/');
-            }} />
-        );
-      case lendBookStates.NONE:
-        props.changeLendBookState(lendBookStates.SCAN_ISBN)
-        break;
-      default:
-        return <span />
+        <Scanner
+          onDetected={onIsbnDetected}
+        />
+      );
     }
   }
 
@@ -96,4 +63,4 @@ export default withFirebase(withFirestore(connect(
     searchBookDetails: (isbn, firestore) => searchInFirestore(isbn, firestore),
     changeLendBookState: state => dispatch(changeLendBookState(state))
   })
-)(LendBook)));
+)(ReturnBook)));
