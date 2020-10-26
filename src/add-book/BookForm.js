@@ -13,6 +13,7 @@ function BookForm(props) {
   const [title, setTitle] = useState(props.title);
   const [author, setAuthor] = useState(props.author);
   const [location, setLocation] = useState('Gliwice');
+  const [condition, setCondition] = useState('OK');
 
   return (
     <div>
@@ -23,7 +24,7 @@ function BookForm(props) {
           value={isbn}
           type="number"
           onChange={event => setIsbn(event.target.value)}
-          />
+        />
         <TextField variant="standard" label="Tytuł" value={title} onChange={event => setTitle(event.target.value)} />
         <TextField variant="standard" label="Autor" value={author} onChange={event => setAuthor(event.target.value)} />
         <FormControl>
@@ -41,9 +42,24 @@ function BookForm(props) {
             <option value={'Kraków'}>Kraków</option>
           </NativeSelect>
         </FormControl>
+        <FormControl>
+          <InputLabel htmlFor="condition-native-simple">Stan</InputLabel>
+          <NativeSelect
+            value={condition}
+            onChange={event => setCondition(event.target.value)}
+            inputProps={{
+              name: 'condition',
+              id: 'condition-native-simple',
+            }}
+          >
+            <option value={'OK'}>OK</option>
+            <option value={'Nówka'}>Nówka</option>
+            <option value={'RozpadaSię'}>Rozpada się</option>
+          </NativeSelect>
+        </FormControl>
       </form>
       <div className="actionButton">
-        <Fab onClick={() => props.onActionClicked({author, title, location, isbn: props.isbn})}>
+        <Fab onClick={() => props.onActionClicked({ author, title, location, condition, isbn: props.isbn })}>
           <SaveIcon color="primary" />
         </Fab>
       </div>

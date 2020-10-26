@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Book(props) {
-  const {book} = props;
+  const { book } = props;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [timer, setTimer] = useState(null);
@@ -53,7 +53,7 @@ function Book(props) {
   }
   const firebase = useFirebase();
   const handleExpandClick = () => {
-    setExpanded(!expanded); 
+    setExpanded(!expanded);
   };
 
   useEffect(() => {
@@ -88,9 +88,9 @@ function Book(props) {
         title={book.title}
       />}
       {book.description && <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-              {book.description}
-          </Typography> 
+        <Typography variant="body2" color="textSecondary" component="p">
+          {book.description}
+        </Typography>
       </CardContent>}
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -119,6 +119,7 @@ function Book(props) {
         <CardContent>
           ISBN: {book.isbn}
           {book.metadata && <div>
+            <p>Stan: {book.metadata.condition}</p>
             <p>Dodane przez: {book.metadata.name}</p>
             <p>Dodane w dniu: {new Date(book.metadata.time).toDateString()}</p>
             <div>

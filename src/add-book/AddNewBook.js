@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import WebcamCapture from "../camera/WebcamCapture";
-import { 
+import {
   addBookStates,
   changeAddBookState,
   setScannedIsbn,
   searchBookDetails
- } from '../actions/books'; 
-import {connect} from 'react-redux';
+} from '../actions/books';
+import { connect } from 'react-redux';
 import Scanner from './Scanner';
 import BookForm from './BookForm';
 
 function AddNewBook(props) {
   const [fileName, setFileName] = useState('');
-  const {step} = props;
+  const { step } = props;
 
   const addNewBook = book => {
     const currentUser = props.firebase.auth().currentUser
@@ -24,18 +24,17 @@ function AddNewBook(props) {
       fileName: fileName
     }
 
-    props.firestore.add('books', {...book, metadata})
+    props.firestore.add('books', { ...book, metadata })
   }
 
-  const onIsbnDetected = isbn => { 
+  const onIsbnDetected = isbn => {
     navigator.vibrate([200])
-    props.searchBookDetails(isbn); 
-    props.setScannedIsbn(isbn); 
+    props.searchBookDetails(isbn);
+    props.setScannedIsbn(isbn);
     props.changeAddBookState(addBookStates.TAKE_PHOTO);
   }
-
   const renderStep = step => {
-    switch(step) {
+    switch (step) {
       case addBookStates.SCAN_ISBN:
         return (
           <Scanner
@@ -45,7 +44,7 @@ function AddNewBook(props) {
       case addBookStates.FILL_BOOK_INFO:
         return (
           <BookForm
-            onActionClicked={bookInfo => { 
+            onActionClicked={bookInfo => {
               addNewBook(bookInfo);
               props.changeAddBookState(addBookStates.NONE)
               props.history.push('/')
@@ -54,10 +53,10 @@ function AddNewBook(props) {
       case addBookStates.TAKE_PHOTO:
         return (
           <div>
-            <WebcamCapture onScanComplete={file => { 
+            <WebcamCapture onScanComplete={file => {
               setFileName(file);
               props.changeAddBookState(addBookStates.FILL_BOOK_INFO);
-              }} 
+            }}
             />
           </div>);
       case addBookStates.NONE:
