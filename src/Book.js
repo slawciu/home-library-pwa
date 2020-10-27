@@ -119,7 +119,7 @@ function Book(props) {
         <CardContent>
           ISBN: {book.isbn}
           {book.metadata && <div>
-            <p>Stan: {book.metadata.condition}</p>
+            <p>Stan: {book.condition}</p>
             <p>Dodane przez: {book.metadata.name}</p>
             <p>Dodane w dniu: {new Date(book.metadata.time).toDateString()}</p>
             <div>
