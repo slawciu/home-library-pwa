@@ -34,7 +34,7 @@ function App(props) {
       user => {
         setIsSignedIn(!!user)})
   })
-  
+  console.log(process.env.REACT_APP_GOOGLE_API_KEY)
   return (
     <Router>
       <div className="App">

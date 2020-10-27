@@ -90,7 +90,7 @@ export const searchBookDetails = isbn => {
       title = existingBook.title;
       author = existingBook.author;  
     } else {
-      const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=${process.env.GOOGLE_API_KEY}`;
+      const uri = `https://www.googleapis.com/books/v1/volumes?q=isbn%3d${isbn}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
       const response = await fetch(uri);
       const bookInfo = await response.json();
       if (bookInfo.items && bookInfo.items.length > 0) {
