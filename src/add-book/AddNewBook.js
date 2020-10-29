@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import WebcamCapture from "../camera/WebcamCapture";
 import {
@@ -10,9 +10,11 @@ import {
 import { connect } from 'react-redux';
 import Scanner from './Scanner';
 import BookForm from './BookForm';
+import isCameraAvailable from '../camera/utils';
 
 function AddNewBook(props) {
   const [fileName, setFileName] = useState('');
+  const [isCamera, setIsCamera] = useState(true);
   const { step } = props;
 
   const addNewBook = book => {
@@ -26,6 +28,14 @@ function AddNewBook(props) {
 
     props.firestore.add('books', { ...book, metadata })
   }
+
+  useEffect(() => {
+    const checkCamera = async () => {
+      setIsCamera(await isCameraAvailable());
+    }
+
+    checkCamera()
+  }, [])
 
   const onIsbnDetected = isbn => {
     navigator.vibrate([200])
@@ -51,14 +61,21 @@ function AddNewBook(props) {
             }} />
         );
       case addBookStates.TAKE_PHOTO:
-        return (
-          <div>
-            <WebcamCapture onScanComplete={file => {
-              setFileName(file);
-              props.changeAddBookState(addBookStates.FILL_BOOK_INFO);
-            }}
-            />
-          </div>);
+        if (isCamera) {
+          return (
+            <div>
+              <WebcamCapture onScanComplete={file => {
+                setFileName(file);
+                props.changeAddBookState(addBookStates.FILL_BOOK_INFO);
+              }}
+              />
+            </div>);
+        } else {
+          props.changeAddBookState(addBookStates.FILL_BOOK_INFO);
+          return (
+            <span></span>
+          );
+        }
       case addBookStates.NONE:
         props.changeAddBookState(addBookStates.SCAN_ISBN)
         break;
