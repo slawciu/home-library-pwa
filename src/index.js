@@ -15,14 +15,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createFirestoreInstance, firestoreReducer } from 'redux-firestore' // <- needed if using firestore
 const fbConfig = {
-    apiKey: "AIzaSyC1SYzLVPqPgyIdILz8-gF7TMVGFNLd1e8",
-    authDomain: "home-library-pwa.firebaseapp.com",
-    databaseURL: "https://home-library-pwa.firebaseio.com",
-    projectId: "home-library-pwa",
-    storageBucket: "home-library-pwa.appspot.com",
-    messagingSenderId: "670201732515",
-    appId: "1:670201732515:web:1aa86f884f84a90e7a0e16",
-    measurementId: "G-VCPJFT8GSV"
+  apiKey: "AIzaSyC1SYzLVPqPgyIdILz8-gF7TMVGFNLd1e8",
+  authDomain: "home-library-pwa.firebaseapp.com",
+  databaseURL: "https://home-library-pwa.firebaseio.com",
+  projectId: "home-library-pwa",
+  storageBucket: "home-library-pwa.appspot.com",
+  messagingSenderId: "670201732515",
+  appId: "1:670201732515:web:1aa86f884f84a90e7a0e16",
+  measurementId: "G-VCPJFT8GSV"
 }
 
 // react-redux-firebase config
@@ -31,8 +31,8 @@ const rrfConfig = {
 }
 try {
   firebase.initializeApp(fbConfig)
-} catch(e) { console.log(e) }
-firebase.firestore().enablePersistence({synchronizeTabs:true});
+} catch (e) { console.log(e) }
+firebase.firestore().enablePersistence({ synchronizeTabs: true });
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 // Add firebase to reducers
 const rootReducer = combineReducers({
@@ -69,9 +69,9 @@ render(
       <App />
     </ReactReduxFirebaseProvider>
   </Provider>
-, document.getElementById('root'));
+  , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register();
+serviceWorker.unregister();

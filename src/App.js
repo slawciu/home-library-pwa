@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Home from './Home';
 import Fallback from './Fallback';
 import AddNewBook from './add-book/AddNewBook';
@@ -32,16 +32,16 @@ function App(props) {
   useEffect(() => {
     return props.firebase.auth().onAuthStateChanged(
       user => {
-        setIsSignedIn(!!user)})
+        setIsSignedIn(!!user)
+      })
   })
-  console.log(process.env.REACT_APP_GOOGLE_API_KEY)
   return (
     <Router>
       <div className="App">
         <Header isSignedIn={isSignedIn} />
         <div className="content">
-        {isSignedIn !== undefined && !isSignedIn && <div>
-            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={props.firebase.auth()}/>
+          {isSignedIn !== undefined && !isSignedIn && <div>
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={props.firebase.auth()} />
           </div>}
           {isSignedIn && <Switch>
             <Route path="/add" component={AddNewBook} />
@@ -52,7 +52,7 @@ function App(props) {
         </div>
       </div>
     </Router>
-      
+
   );
 }
 
