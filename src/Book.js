@@ -57,7 +57,7 @@ function Book(props) {
   }
 
   const updateBook = book => {
-    props.firestore.update(`books/${book.id}/`, book)
+    props.firestore.update(`books/${book.id}`, book)
   }
 
   const firebase = useFirebase();
@@ -81,7 +81,7 @@ function Book(props) {
 
   const handleCloseLocationUpdateDialog = value => {
     setIsLocationUpdateDialogOpen(false);
-    // updateBook({...book, location: value});
+    updateBook({...book, location: value});
   }
 
   return (
