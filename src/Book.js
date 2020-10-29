@@ -17,6 +17,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withFirestore, withFirebase } from 'react-redux-firebase'
 import { useFirebase } from 'react-redux-firebase'
+import UpdateLocationDialog from './UpdateLocationDialog';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
+    cursor: 'pointer',
     backgroundColor: red[500],
   },
 }));
@@ -47,10 +49,17 @@ function Book(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [timer, setTimer] = useState(null);
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState('');
+  const [isLocationUpdateDialogOpen, setIsLocationUpdateDialogOpen] = useState(false)
+
   const removeBook = bookId => {
     props.firestore.delete(`books/${bookId}`)
   }
+
+  const updateBook = book => {
+    props.firestore.update(`books/${book.id}`, book)
+  }
+
   const firebase = useFirebase();
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -66,11 +75,20 @@ function Book(props) {
     }
   }, [book.metadata, firebase])
 
+  const handleOpenLocationUpdateDialog = () => {
+    setIsLocationUpdateDialogOpen(true)
+  }
+
+  const handleCloseLocationUpdateDialog = value => {
+    setIsLocationUpdateDialogOpen(false);
+    updateBook({...book, location: value});
+  }
+
   return (
     <Card className={classes.card}>
       <CardHeader
         avatar={
-          <Avatar aria-label="location" className={classes.avatar}>
+          <Avatar aria-label="location" className={classes.avatar} onClick={() => handleOpenLocationUpdateDialog()}>
             {book.location[0]}
           </Avatar>
         }
@@ -129,6 +147,7 @@ function Book(props) {
           }
         </CardContent>
       </Collapse>
+      <UpdateLocationDialog selectedValue={book.location} onClose={handleCloseLocationUpdateDialog} open={isLocationUpdateDialogOpen}/>
     </Card>
   );
 }
